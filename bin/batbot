@@ -4,14 +4,14 @@
 VERSION="1.4.3.4\nBot de Telegram en Bash traducido por uGeek"
 # Fork de 1.4.3.4 - uGeekPodcast
 
+# Directorio de usuarios (Ruta donde está nuestra carpeta .batbot en nuestro servidor, Raspberry,...)
+BATBOTUSR="$HOME/.batbot"
+
 # Ingrese el token BOT devuelto por BotFather
-TELEGRAMTOKEN="< Intruduce aquí el nº de Token >"
+TELEGRAMTOKEN="$(cat "$BATBOTUSR/telegramtoken")"
 
 # Ingrese el ID de usuario maestro para notificaciones de uso
-PERSONALID="< ID del usuario Maestro >" 
- 
-# Directorio de usuarios (Ruta donde está nuestra carpeta .batbot en nuestro servidor, Raspberry,...)
-BATBOTUSR="/root/.batbot" 
+PERSONALID="$(cat "$BATBOTUSR/personalid")"
 
 # cree el archivo allowed_users especificando las ID de los usuarios autorizados para enviar los comandos. Una identificación por línea 
 ALLOWEDUSER=$BATBOTUSR/allowed_users
