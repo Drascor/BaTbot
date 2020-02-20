@@ -19,6 +19,9 @@ ALLOWEDUSER=$BATBOTUSR/allowed_users
 # revisar nuevos mensajes cada X segundos:
 CHECKNEWMSG=5
 
+# last bot message file
+LASTMSGFILE="$BATBOTUSR/$BOTID.lastmsg"
+
 # Comandos
 # respete este formato: ["/ mi comando"] = '<comando del sistema>'
 # Por favor, recuerde eliminar los ejemplos innecesarios
@@ -65,10 +68,10 @@ else
     exit;
 fi
 
-if [ -e "$BATBOTUSR/$BOTID.lastmsg" ]; then
+if [ -e "$LASTMSGFILE" ]; then
     FIRSTTIME=0;
 else
-    touch $BATBOTUSR/$BOTID.lastmsg
+    touch "$LASTMSGFILE"
     FIRSTTIME=1;
 fi
 
@@ -117,12 +120,12 @@ while true; do
         if [[ $MSGID -ne 0 && $CHATID -ne 0 ]]; then
             ### comprobar si el usuario está autorizado
             UserAllowed=$(grep -x "${FROMID}" $ALLOWEDUSER |wc -l)
-            LASTMSGID=$(cat "${BOTID}.lastmsg")
+            LASTMSGID=$(cat "$LASTMSGFILE")
             FIRSTNAMEUTF8=$(echo -e "$FIRSTNAME")
             if [[ $MSGID -gt $LASTMSGID ]]; then
                 if grep -qe "$(echo $TEXT | awk '{print $1}')" <(echo "${!botcommands[@]}"); then
                     echo "[chat ${CHATID}][da ${FROMID}] <${FIRSTNAMEUTF8} ${LASTNAME}> ${TEXT}"
-                    echo $MSGID > "${BOTID}.lastmsg"
+                    echo $MSGID > "$LASTMSGFILE"
                     for s in "${!botcommands[@]}"; do
                         if [[ "$TEXT" =~ ${s} ]]; then
                             DATENOW=$(date "+%s")
@@ -172,7 +175,7 @@ while true; do
                         fi
                     done
                 else
-                    echo $MSGID > "${BOTID}.lastmsg"
+                    echo $MSGID > "$LASTMSGFILE"
                     if [[ $UserAllowed -eq 1 ]]; then
                         echo "Comando $TEXT no reconocido"
                         curl -s -d "text=Comando $TEXT no reconocido.&chat_id=${CHATID}" "https://api.telegram.org/bot${TELEGRAMTOKEN}/sendMessage" > /dev/null
