@@ -158,19 +158,14 @@ while true; do
                                     fi
                                 fi
                             else
-                                if [[ ${s} == "/ilmioid" ]]; then
-                                    CMDOUTPUT=$($CMDORIG)
-                                    curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
-                                else
-                                    CMDOUTPUT="BOT Privado. No estas autorizado a utilizarlo! tu ID es: ${FROMID}, Comunicate con el administrador para que te habilite."
-                                    echo "Tu nombre no está en la lista: ${s} ricevuto darecibido por ${FIRSTNAMEUTF8} ${FROMID}"
-                                    curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
-                                    if [[ ${FROMID} != ${PERSONALID} ]]; then
-                                        curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "$API_URL/sendMessage" > /dev/null
-                                    fi
-                                    if [[ ${s} == "/start" ]]; then
-                                        ./userlist "${FROMID}:${FIRSTNAMEUTF8}${LASTNAME}"
-                                    fi
+                                CMDOUTPUT="BOT Privado. No estas autorizado a utilizarlo! tu ID es: ${FROMID}, Comunicate con el administrador para que te habilite."
+                                echo "Tu nombre no está en la lista: ${s} recibido por ${FIRSTNAMEUTF8} ${FROMID}"
+                                curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
+                                if [[ ${FROMID} != ${PERSONALID} ]]; then
+                                    curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "$API_URL/sendMessage" > /dev/null
+                                fi
+                                if [[ ${s} == "/start" ]]; then
+                                    ./userlist "${FROMID}:${FIRSTNAMEUTF8}${LASTNAME}"
                                 fi
                             fi
 
