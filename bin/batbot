@@ -169,7 +169,7 @@ while true; do
                                         curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "$API_URL/sendMessage" > /dev/null
                                     fi
                                     if [[ ${s} == "/start" ]]; then
-                                        userlist ${FROMID}:${FIRSTNAMEUTF8}${LASTNAME}
+                                        ./userlist "${FROMID}:${FIRSTNAMEUTF8}${LASTNAME}"
                                     fi
                                 fi
                             fi
