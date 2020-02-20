@@ -119,7 +119,7 @@ while true; do
 
         if [[ $MSGID -ne 0 && $CHATID -ne 0 ]]; then
             ### comprobar si el usuario está autorizado
-            UserAllowed=$(grep -x "${FROMID}" $ALLOWEDUSER |wc -l)
+            USERALLOWED=$(grep -x "${FROMID}" $ALLOWEDUSER |wc -l)
             LASTMSGID=$(cat "$LASTMSGFILE")
             FIRSTNAMEUTF8=$(echo -e "$FIRSTNAME")
             if [[ $MSGID -gt $LASTMSGID ]]; then
@@ -143,7 +143,7 @@ while true; do
                             CMDORIG=${CMDORIG//@R2/${BASH_REMATCH[2]}}
                             CMDORIG=${CMDORIG//@R3/${BASH_REMATCH[3]}}
 
-                            if [[ $UserAllowed -eq 1 ]]; then
+                            if [[ $USERALLOWED -eq 1 ]]; then
                                 if [[ $FIRSTTIME -eq 1 || $DATEDIFF -gt 10 ]]; then
                                     echo "Mensaje antiguo, no hay respuesta del usuario"
                                     curl -s -d "text=Mensaje antiguo&chat_id=${PERSONALID}" "https://api.telegram.org/bot${TELEGRAMTOKEN}/sendMessage" > /dev/null
@@ -176,7 +176,7 @@ while true; do
                     done
                 else
                     echo $MSGID > "$LASTMSGFILE"
-                    if [[ $UserAllowed -eq 1 ]]; then
+                    if [[ $USERALLOWED -eq 1 ]]; then
                         echo "Comando $TEXT no reconocido"
                         curl -s -d "text=Comando $TEXT no reconocido.&chat_id=${CHATID}" "https://api.telegram.org/bot${TELEGRAMTOKEN}/sendMessage" > /dev/null
                         if [[ ${FROMID} != ${PERSONALID} ]]; then
