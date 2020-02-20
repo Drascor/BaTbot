@@ -49,30 +49,30 @@ FIRSTTIME=0
 
 echo -e "\nBaTbot v${VERSION}\n"
 ABOUTME=$(curl -s "https://api.telegram.org/bot${TELEGRAMTOKEN}/getMe")
-if [[ "$ABOUTME" =~ \"ok\"\:true\, ]]; then
-    if [[ "$ABOUTME" =~ \"username\"\:\"([^\"]+)\" ]]; then
+if [[ "$ABOUTME" =~ \"ok\":true\, ]]; then
+    if [[ "$ABOUTME" =~ \"username\":\"([^\"]+)\" ]]; then
         echo -e "Nick del BOT:\t @${BASH_REMATCH[1]}"
     fi
 
-    if [[ "$ABOUTME" =~ \"first_name\"\:\"([^\"]+)\" ]]; then
+    if [[ "$ABOUTME" =~ \"first_name\":\"([^\"]+)\" ]]; then
         echo -e "Nombre del Bot:\t ${BASH_REMATCH[1]}"
     fi
 
-    if [[ "$ABOUTME" =~ \"id\"\:([0-9\-]+), ]]; then
+    if [[ "$ABOUTME" =~ \"id\":([0-9\-]+), ]]; then
         echo -e "Bot ID:\t\t ${BASH_REMATCH[1]}"
-        BOTID=${BASH_REMATCH[1]};
+        BOTID=${BASH_REMATCH[1]}
     fi
 
 else
     echo "Error: tal vez el token este equivocado ... saliendo"
-    exit;
+    exit
 fi
 
 if [ -e "$LASTMSGFILE" ]; then
-    FIRSTTIME=0;
+    FIRSTTIME=0
 else
     touch "$LASTMSGFILE"
-    FIRSTTIME=1;
+    FIRSTTIME=1
 fi
 
 echo -e "\nIniciando... Esperando un nuevo mensaje\n"
@@ -84,36 +84,36 @@ while true; do
     FIRSTNAME=""
     LASTNAME=""
     echo -e "${MSGOUTPUT}" | while read -r line ; do
-        if [[ "$line" =~ \"chat\"\:\{\"id\"\:([\-0-9]+)\, ]]; then
+        if [[ "$line" =~ \"chat\":\{\"id\":([\-0-9]+)\, ]]; then
             CHATID=${BASH_REMATCH[1]}
         fi
 
-        if [[ "$line" =~ \"message\_id\"\:([0-9]+)\, ]]; then
+        if [[ "$line" =~ \"message_id\":([0-9]+)\, ]]; then
             MSGID=${BASH_REMATCH[1]}
         fi
 
-        if [[ "$line" =~ \"text\"\:\"([^\"]+)\" ]]; then
+        if [[ "$line" =~ \"text\":\"([^\"]+)\" ]]; then
             TEXT=${BASH_REMATCH[1]}
             LASTLINERCVD=${line}
         fi
 
-        if [[ "$line" =~ \"username\"\:\"([^\"]+)\" ]]; then
+        if [[ "$line" =~ \"username\":\"([^\"]+)\" ]]; then
             USERNAME=${BASH_REMATCH[1]}
         fi
 
-        if [[ "$line" =~ \"first_name\"\:\"([^\"]+)\" ]]; then
+        if [[ "$line" =~ \"first_name\":\"([^\"]+)\" ]]; then
             FIRSTNAME=${BASH_REMATCH[1]}
         fi
 
-        if [[ "$line" =~ \"last_name\"\:\"([^\"]+)\" ]]; then
+        if [[ "$line" =~ \"last_name\":\"([^\"]+)\" ]]; then
             LASTNAME=${BASH_REMATCH[1]}
         fi
 
-        if [[ "$line" =~ \"from\"\:\{\"id\"\:([0-9\-]+), ]]; then
+        if [[ "$line" =~ \"from\":\{\"id\":([0-9\-]+), ]]; then
             FROMID="${BASH_REMATCH[1]}"
         fi
 
-        if [[ "$line" =~ \"date\"\:([0-9]+)\, ]]; then
+        if [[ "$line" =~ \"date\":([0-9]+)\, ]]; then
             DATE=${BASH_REMATCH[1]}
         fi
 
@@ -195,7 +195,7 @@ while true; do
         fi
     done
 
-    FIRSTTIME=0;
+    FIRSTTIME=0
 
     read -t $CHECKNEWMSG answer
     if [[ "$answer" =~ ^\.msg.([\-0-9]+).(.*) ]]; then
