@@ -48,7 +48,7 @@ declare -A botcommands=(
 FIRSTTIME=0
 
 echo -e "\nBaTbot v${VERSION}\n"
-ABOUTME=`curl -s "https://api.telegram.org/bot${TELEGRAMTOKEN}/getMe"`
+ABOUTME=$(curl -s "https://api.telegram.org/bot${TELEGRAMTOKEN}/getMe")
 if [[ "$ABOUTME" =~ \"ok\"\:true\, ]]; then
     if [[ "$ABOUTME" =~ \"username\"\:\"([^\"]+)\" ]]; then
         echo -e "Nick del BOT:\t @${BASH_REMATCH[1]}"
@@ -149,7 +149,7 @@ while true; do
                                     curl -s -d "text=Mensaje antiguo&chat_id=${PERSONALID}" "https://api.telegram.org/bot${TELEGRAMTOKEN}/sendMessage" > /dev/null
                                 else
                                     echo "Comando ${s} recibido, ejecuto: ${CMDORIG}"
-                                    CMDOUTPUT=`$CMDORIG`
+                                    CMDOUTPUT=$($CMDORIG)
                                     curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "https://api.telegram.org/bot${TELEGRAMTOKEN}/sendMessage" > /dev/null
                                     if [[ ${FROMID} != ${PERSONALID} ]]; then
                                         curl -s -d "text=${s} recibido de ${FIRSTNAMEUTF8} ${LASTNAME} ${FROMID}&chat_id=${PERSONALID}" "https://api.telegram.org/bot${TELEGRAMTOKEN}/sendMessage" > /dev/null
@@ -157,7 +157,7 @@ while true; do
                                 fi
                             else
                                 if [[ ${s} == "/ilmioid" ]]; then
-                                    CMDOUTPUT=`$CMDORIG`
+                                    CMDOUTPUT=$($CMDORIG)
                                     curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "https://api.telegram.org/bot${TELEGRAMTOKEN}/sendMessage" > /dev/null
                                 else
                                     CMDOUTPUT="BOT Privado. No estas autorizado a utilizarlo! tu ID es: ${FROMID}, Comunicate con el administrador para que te habilite."
