@@ -121,13 +121,13 @@ while true; do
 
         if [[ $MSGID -ne 0 && $CHATID -ne 0 ]]; then
             ### comprobar si el usuario está autorizado
-            USERALLOWED=$(grep -cx "${FROMID}" $ALLOWEDUSER)
+            USERALLOWED=$(grep -cx "${FROMID}" "$ALLOWEDUSER")
             LASTMSGID=$(cat "$LASTMSGFILE")
             FIRSTNAMEUTF8=$(echo -e "$FIRSTNAME")
             if [[ $MSGID -gt $LASTMSGID ]]; then
-                if grep -qe "$(echo $TEXT | awk '{print $1}')" <(echo "${!botcommands[@]}"); then
+                if grep -qe "$(echo "$TEXT" | awk '{print $1}')" <(echo "${!botcommands[@]}"); then
                     echo "[chat ${CHATID}][da ${FROMID}] <${FIRSTNAMEUTF8} ${LASTNAME}> ${TEXT}"
-                    echo $MSGID > "$LASTMSGFILE"
+                    echo "$MSGID" > "$LASTMSGFILE"
                     for s in "${!botcommands[@]}"; do
                         if [[ "$TEXT" =~ ${s} ]]; then
                             DATENOW=$(date "+%s")
@@ -172,7 +172,7 @@ while true; do
                         fi
                     done
                 else
-                    echo $MSGID > "$LASTMSGFILE"
+                    echo "$MSGID" > "$LASTMSGFILE"
                     if [[ $USERALLOWED -eq 1 ]]; then
                         echo "Comando $TEXT no reconocido"
                         curl -s -d "text=Comando $TEXT no reconocido.&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
