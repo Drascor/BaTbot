@@ -121,7 +121,7 @@ while true; do
 
         if [[ $MSGID -ne 0 && $CHATID -ne 0 ]]; then
             ### comprobar si el usuario está autorizado
-            USERALLOWED=$(grep -x "${FROMID}" $ALLOWEDUSER |wc -l)
+            USERALLOWED=$(grep -cx "${FROMID}" $ALLOWEDUSER)
             LASTMSGID=$(cat "$LASTMSGFILE")
             FIRSTNAMEUTF8=$(echo -e "$FIRSTNAME")
             if [[ $MSGID -gt $LASTMSGID ]]; then
