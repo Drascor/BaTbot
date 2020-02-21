@@ -161,7 +161,7 @@ while true; do
                                 CMDOUTPUT="BOT Privado. No estas autorizado a utilizarlo! tu ID es: ${FROMID}, Comunicate con el administrador para que te habilite."
                                 echo "Tu nombre no está en la lista: ${s} recibido por ${FIRSTNAMEUTF8} ${FROMID}"
                                 curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
-                                if [[ ${FROMID} != ${PERSONALID} ]]; then
+                                if [[ ${FROMID} != "${PERSONALID}" ]]; then
                                     curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                                 fi
                                 if [[ ${s} == "/start" ]]; then
@@ -176,14 +176,14 @@ while true; do
                     if [[ ${USERALLOWED} -eq 1 ]]; then
                         echo "Comando ${TEXT} no reconocido"
                         curl -s -d "text=Comando ${TEXT} no reconocido.&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
-                        if [[ ${FROMID} != ${PERSONALID} ]]; then
+                        if [[ ${FROMID} != "${PERSONALID}" ]]; then
                             curl -s -d "text=${TEXT} no reconocido recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                         fi
                     else
                         CMDOUTPUT="¡No estás autorizado para ejecutar este comando!"
                         echo "Comando no habilitado : ${s} recibido de ${FROMID} ${FIRSTNAMEUTF8}"
                         curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
-                        if [[ ${FROMID} != ${PERSONALID} ]]; then
+                        if [[ ${FROMID} != "${PERSONALID}" ]]; then
                             curl -s -d "text=Comando no habilitado: ${s} recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                         fi
                     fi
