@@ -194,7 +194,7 @@ while true; do
 
     FIRSTTIME=0
 
-    read -tr ${CHECKNEWMSG} answer
+    read -rt ${CHECKNEWMSG} answer
     if [[ "$answer" =~ ^\.msg.([\-0-9]+).(.*) ]]; then
         CHATID=${BASH_REMATCH[1]}
         MSGSEND=${BASH_REMATCH[2]}
