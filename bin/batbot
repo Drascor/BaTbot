@@ -30,7 +30,7 @@ LASTMSGFILE="${BATBOTUSR}/${BOTID}.lastmsg"
 # Para agregar estos comandos a los comandos personalizados,
 # usa la función / setcommands en BotFather
 
-declare -A botcommands=(
+declare -A BOTCOMMANDS=(
     ["/start"]='exec userlist @USERID:@FIRSTNAME@LASTNAME'
     ["/myid"]='echo Tu ID es: @USERID'
     ["/myuser"]='echo Tu nombre de usuario es: @USERNAME'
@@ -125,14 +125,14 @@ while true; do
             LASTMSGID=$(cat "${LASTMSGFILE}")
             FIRSTNAMEUTF8=$(echo -e "$FIRSTNAME")
             if [[ $MSGID -gt $LASTMSGID ]]; then
-                if grep -qe "$(echo "${TEXT}" | awk '{print $1}')" <(echo "${!botcommands[@]}"); then
+                if grep -qe "$(echo "${TEXT}" | awk '{print $1}')" <(echo "${!BOTCOMMANDS[@]}"); then
                     echo "[chat ${CHATID}][da ${FROMID}] <${FIRSTNAMEUTF8} ${LASTNAME}> ${TEXT}"
                     echo "$MSGID" > "${LASTMSGFILE}"
-                    for s in "${!botcommands[@]}"; do
+                    for s in "${!BOTCOMMANDS[@]}"; do
                         if [[ "${TEXT}" =~ ${s} ]]; then
                             DATENOW=$(date "+%s")
                             DATEDIFF=$(( DATENOW - DATE ))
-                            CMDORIG=${botcommands["$s"]}
+                            CMDORIG=${BOTCOMMANDS["$s"]}
                             CMDORIG=${CMDORIG//@USERID/$FROMID}
                             CMDORIG=${CMDORIG//@USERNAME/$USERNAME}
                             CMDORIG=${CMDORIG//@FIRSTNAME/$FIRSTNAMEUTF8}
