@@ -131,7 +131,7 @@ while true; do
                     for s in "${!botcommands[@]}"; do
                         if [[ "$TEXT" =~ ${s} ]]; then
                             DATENOW=$(date "+%s")
-                            DATEDIFF=$(( $DATENOW - $DATE ))
+                            DATEDIFF=$(( DATENOW - DATE ))
                             CMDORIG=${botcommands["$s"]}
                             CMDORIG=${CMDORIG//@USERID/$FROMID}
                             CMDORIG=${CMDORIG//@USERNAME/$USERNAME}
