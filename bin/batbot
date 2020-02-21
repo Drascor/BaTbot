@@ -146,7 +146,7 @@ while true; do
                             CMDORIG=${CMDORIG//@R3/${BASH_REMATCH[3]}}
 
                             if [[ ${USERALLOWED} -eq 1 ]]; then
-                                if [[ $FIRSTTIME -eq 1 || $DATEDIFF -gt 10 ]]; then
+                                if [[ ${FIRSTTIME} -eq 1 || ${DATEDIFF} -gt 10 ]]; then
                                     echo "Mensaje antiguo, no hay respuesta del usuario"
                                     curl -s -d "text=Mensaje antiguo&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                                 else
