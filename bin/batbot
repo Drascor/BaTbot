@@ -8,21 +8,21 @@ VERSION="1.4.3.4\nBot de Telegram en Bash traducido por uGeek"
 BATBOTUSR="$HOME/.batbot"
 
 # Ingrese el token BOT devuelto por BotFather
-TELEGRAMTOKEN="$(cat "$BATBOTUSR/telegramtoken")"
+TELEGRAMTOKEN="$(cat "${BATBOTUSR}/telegramtoken")"
 
 # Ingrese el ID de usuario maestro para notificaciones de uso
-PERSONALID="$(cat "$BATBOTUSR/personalid")"
+PERSONALID="$(cat "${BATBOTUSR}/personalid")"
 
 API_URL="https://api.telegram.org/bot${TELEGRAMTOKEN}"
 
 # cree el archivo allowed_users especificando las ID de los usuarios autorizados para enviar los comandos. Una identificación por línea
-ALLOWEDUSER=$BATBOTUSR/allowed_users
+ALLOWEDUSER="${BATBOTUSR}/allowed_users"
 
 # revisar nuevos mensajes cada X segundos:
 CHECKNEWMSG=5
 
 # last bot message file
-LASTMSGFILE="$BATBOTUSR/$BOTID.lastmsg"
+LASTMSGFILE="${BATBOTUSR}/${BOTID}.lastmsg"
 
 # Comandos
 # respete este formato: ["/ mi comando"] = '<comando del sistema>'
@@ -50,17 +50,17 @@ declare -A botcommands=(
 FIRSTTIME=0
 
 echo -e "\nBaTbot v${VERSION}\n"
-ABOUTME=$(curl -s "$API_URL/getMe")
-if [[ "$ABOUTME" =~ \"ok\":true\, ]]; then
-    if [[ "$ABOUTME" =~ \"username\":\"([^\"]+)\" ]]; then
+ABOUTME=$(curl -s "${API_URL}/getMe")
+if [[ "${ABOUTME}" =~ \"ok\":true\, ]]; then
+    if [[ "${ABOUTME}" =~ \"username\":\"([^\"]+)\" ]]; then
         echo -e "Nick del BOT:\t @${BASH_REMATCH[1]}"
     fi
 
-    if [[ "$ABOUTME" =~ \"first_name\":\"([^\"]+)\" ]]; then
+    if [[ "${ABOUTME}" =~ \"first_name\":\"([^\"]+)\" ]]; then
         echo -e "Nombre del Bot:\t ${BASH_REMATCH[1]}"
     fi
 
-    if [[ "$ABOUTME" =~ \"id\":([0-9\-]+), ]]; then
+    if [[ "${ABOUTME}" =~ \"id\":([0-9\-]+), ]]; then
         echo -e "Bot ID:\t\t ${BASH_REMATCH[1]}"
         BOTID=${BASH_REMATCH[1]}
     fi
@@ -70,17 +70,17 @@ else
     exit
 fi
 
-if [ -e "$LASTMSGFILE" ]; then
+if [ -e "${LASTMSGFILE}" ]; then
     FIRSTTIME=0
 else
-    touch "$LASTMSGFILE"
+    touch "${LASTMSGFILE}"
     FIRSTTIME=1
 fi
 
 echo -e "\nIniciando... Esperando un nuevo mensaje\n"
 
 while true; do
-    MSGOUTPUT=$(curl -s "$API_URL/getUpdates")
+    MSGOUTPUT=$(curl -s "${API_URL}/getUpdates")
     MSGID=0
     TEXT=0
     FIRSTNAME=""
@@ -122,14 +122,14 @@ while true; do
         if [[ $MSGID -ne 0 && $CHATID -ne 0 ]]; then
             ### comprobar si el usuario está autorizado
             USERALLOWED=$(grep -cx "${FROMID}" "$ALLOWEDUSER")
-            LASTMSGID=$(cat "$LASTMSGFILE")
+            LASTMSGID=$(cat "${LASTMSGFILE}")
             FIRSTNAMEUTF8=$(echo -e "$FIRSTNAME")
             if [[ $MSGID -gt $LASTMSGID ]]; then
-                if grep -qe "$(echo "$TEXT" | awk '{print $1}')" <(echo "${!botcommands[@]}"); then
+                if grep -qe "$(echo "${TEXT}" | awk '{print $1}')" <(echo "${!botcommands[@]}"); then
                     echo "[chat ${CHATID}][da ${FROMID}] <${FIRSTNAMEUTF8} ${LASTNAME}> ${TEXT}"
-                    echo "$MSGID" > "$LASTMSGFILE"
+                    echo "$MSGID" > "${LASTMSGFILE}"
                     for s in "${!botcommands[@]}"; do
-                        if [[ "$TEXT" =~ ${s} ]]; then
+                        if [[ "${TEXT}" =~ ${s} ]]; then
                             DATENOW=$(date "+%s")
                             DATEDIFF=$(( DATENOW - DATE ))
                             CMDORIG=${botcommands["$s"]}
@@ -139,30 +139,30 @@ while true; do
                             CMDORIG=${CMDORIG//@LASTNAME/$LASTNAME}
                             CMDORIG=${CMDORIG//@CHATID/$CHATID}
                             CMDORIG=${CMDORIG//@MSGID/$MSGID}
-                            CMDORIG=${CMDORIG//@TEXT/$TEXT}
+                            CMDORIG=${CMDORIG//@TEXT/${TEXT}}
                             CMDORIG=${CMDORIG//@FROMID/$FROMID}
                             CMDORIG=${CMDORIG//@R1/${BASH_REMATCH[1]}}
                             CMDORIG=${CMDORIG//@R2/${BASH_REMATCH[2]}}
                             CMDORIG=${CMDORIG//@R3/${BASH_REMATCH[3]}}
 
-                            if [[ $USERALLOWED -eq 1 ]]; then
+                            if [[ ${USERALLOWED} -eq 1 ]]; then
                                 if [[ $FIRSTTIME -eq 1 || $DATEDIFF -gt 10 ]]; then
                                     echo "Mensaje antiguo, no hay respuesta del usuario"
-                                    curl -s -d "text=Mensaje antiguo&chat_id=${PERSONALID}" "$API_URL/sendMessage" > /dev/null
+                                    curl -s -d "text=Mensaje antiguo&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                                 else
                                     echo "Comando ${s} recibido, ejecuto: ${CMDORIG}"
                                     CMDOUTPUT=$($CMDORIG)
-                                    curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
-                                    if [[ ${FROMID} != ${PERSONALID} ]]; then
-                                        curl -s -d "text=${s} recibido de ${FIRSTNAMEUTF8} ${LASTNAME} ${FROMID}&chat_id=${PERSONALID}" "$API_URL/sendMessage" > /dev/null
+                                    curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
+                                    if [[ "$FROMID" != "$PERSONALID" ]]; then
+                                        curl -s -d "text=${s} recibido de ${FIRSTNAMEUTF8} ${LASTNAME} ${FROMID}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                                     fi
                                 fi
                             else
                                 CMDOUTPUT="BOT Privado. No estas autorizado a utilizarlo! tu ID es: ${FROMID}, Comunicate con el administrador para que te habilite."
                                 echo "Tu nombre no está en la lista: ${s} recibido por ${FIRSTNAMEUTF8} ${FROMID}"
-                                curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
+                                curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
                                 if [[ ${FROMID} != ${PERSONALID} ]]; then
-                                    curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "$API_URL/sendMessage" > /dev/null
+                                    curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                                 fi
                                 if [[ ${s} == "/start" ]]; then
                                     ./userlist "${FROMID}:${FIRSTNAMEUTF8}${LASTNAME}"
@@ -172,19 +172,19 @@ while true; do
                         fi
                     done
                 else
-                    echo "$MSGID" > "$LASTMSGFILE"
-                    if [[ $USERALLOWED -eq 1 ]]; then
-                        echo "Comando $TEXT no reconocido"
-                        curl -s -d "text=Comando $TEXT no reconocido.&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
+                    echo "$MSGID" > "${LASTMSGFILE}"
+                    if [[ ${USERALLOWED} -eq 1 ]]; then
+                        echo "Comando ${TEXT} no reconocido"
+                        curl -s -d "text=Comando ${TEXT} no reconocido.&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
                         if [[ ${FROMID} != ${PERSONALID} ]]; then
-                            curl -s -d "text=$TEXT no reconocido recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "$API_URL/sendMessage" > /dev/null
+                            curl -s -d "text=${TEXT} no reconocido recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                         fi
                     else
                         CMDOUTPUT="¡No estás autorizado para ejecutar este comando!"
                         echo "Comando no habilitado : ${s} recibido de ${FROMID} ${FIRSTNAMEUTF8}"
-                        curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
+                        curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
                         if [[ ${FROMID} != ${PERSONALID} ]]; then
-                            curl -s -d "text=Comando no habilitado: ${s} recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "$API_URL/sendMessage" > /dev/null
+                            curl -s -d "text=Comando no habilitado: ${s} recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                         fi
                     fi
                 fi
@@ -194,17 +194,16 @@ while true; do
 
     FIRSTTIME=0
 
-    read -tr $CHECKNEWMSG answer
+    read -tr ${CHECKNEWMSG} answer
     if [[ "$answer" =~ ^\.msg.([\-0-9]+).(.*) ]]; then
         CHATID=${BASH_REMATCH[1]}
         MSGSEND=${BASH_REMATCH[2]}
-        curl -s -d "text=${MSGSEND}&chat_id=${CHATID}" "$API_URL/sendMessage" > /dev/null
+        curl -s -d "text=${MSGSEND}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
     elif [[ "$answer" =~ ^\.msg.([a-zA-Z]+).(.*) ]]; then
         CHATID=${BASH_REMATCH[1]}
         MSGSEND=${BASH_REMATCH[2]}
-        curl -s -d "text=${MSGSEND}&chat_id=@${CHATID}" "$API_URL/sendMessage" > /dev/null
+        curl -s -d "text=${MSGSEND}&chat_id=@${CHATID}" "${API_URL}/sendMessage" > /dev/null
     fi
-
 
 done
 
