@@ -24,6 +24,9 @@ CHECKNEWMSG=5
 # last bot message file
 LASTMSGFILE="${BATBOTUSR}/${BOTID}.lastmsg"
 
+# change keyboard
+# curl -s -d "text=keyboard&chat_id=$ID&reply_markup={\"keyboard\":[[{\"text\":\"/help\"}]],\"resize_keyboard\":true,\"one_time_keyboard\":true}" "${API_URL}/sendMessage" && echo
+
 # Comandos
 # respete este formato: ["/ mi comando"] = '<comando del sistema>'
 # Por favor, recuerde eliminar los ejemplos innecesarios
@@ -36,15 +39,30 @@ declare -A BOTCOMMANDS=(
     ["/myuser"]='echo Tu nombre de usuario es: @USERNAME'
     ["/ping ([a-zA-Z0-9]+)"]='echo Pong: @R1'
     ["/uptime"]="uptime"
-    ["/add ([0-9]+)"]='exec admadduser @USERID @R1'
-    ["/del ([0-9]+)"]='exec admdeluser @USERID @R1'
-    ["/lista"]='exec admlistuser @USERID'
-    ["/run (.*)"]="exec @R1"
-    ["/docker_nginx_start"]="docker stop nginx"
-    ["/docker_nginx_stop"]="docker start nginx"
-    ["/menu"]="echo -e Bienvenido a Mi Bot\n/myid \n/myuser \n/uptime \n/run \n/ping \n\nDockers:\n/docker_nginx_start \n/docker_nginx_stop \n\n\n/menu"
-
-
+    # ["/add ([0-9]+)"]='exec admadduser @USERID @R1'
+    # ["/del ([0-9]+)"]='exec admdeluser @USERID @R1'
+    # ["/lista"]='exec admlistuser @USERID'
+    # ["/run (.*)"]="exec @R1"
+    # ["/docker_nginx_start"]="docker stop nginx"
+    # ["/docker_nginx_stop"]="docker start nginx"
+    ["/ip"]='curl -A firefox -s https://www.ignaciocano.com/ip'
+    ["/puppeteer"]="echo $USER"
+    ["/tr_status"]="service transmission-daemon status"
+    ["/tr_start"]="service transmission-daemon start"
+    ["/tr_stop"]="service transmission-daemon stop"
+    ["/help"]='echo -e
+        Commands available: \n\n
+        /ip                 \n\n
+        /myid               \n\n
+        /myuser             \n\n
+        /ping               \n\n
+        /puppeteer          \n\n
+        /run                \n\n
+        /tr_start           \n\n
+        /tr_stop            \n\n
+        /tr_status          \n\n
+        /uptime             \n\n
+    '
 )
 
 FIRSTTIME=0
