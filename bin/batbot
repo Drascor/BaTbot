@@ -120,7 +120,6 @@ while true; do
 
         if [[ "$line" =~ \"text\":\"([^\"]+)\" ]]; then
             TEXT=${BASH_REMATCH[1]}
-            LASTLINERCVD=${line}
         fi
 
         if [[ "$line" =~ \"username\":\"([^\"]+)\" ]]; then
