@@ -7,6 +7,8 @@ VERSION="1.4.3.4\nBot de Telegram en Bash traducido por uGeek"
 # Directorio de usuarios (Ruta donde está nuestra carpeta .batbot en nuestro servidor, Raspberry,...)
 BATBOTUSR="$HOME/.batbot"
 
+BATBOTDIR="$(readlink -f "${BASH_SOURCE%/*}")"
+
 # Ingrese el token BOT devuelto por BotFather
 TELEGRAMTOKEN="$(cat "${BATBOTUSR}/telegramtoken")"
 
@@ -82,6 +84,8 @@ if [[ "${ABOUTME}" =~ \"ok\":true\, ]]; then
         echo -e "Bot ID:\t\t ${BASH_REMATCH[1]}"
         BOTID=${BASH_REMATCH[1]}
     fi
+
+    echo -e "Directorio del Bot:\t ${BATBOTDIR}"
 
 else
     echo "Error: tal vez el token este equivocado ... saliendo"
@@ -183,7 +187,7 @@ while true; do
                                     curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
                                 fi
                                 if [[ ${s} == "/start" ]]; then
-                                    ./userlist "${FROMID}:${FIRSTNAMEUTF8}${LASTNAME}"
+                                    "${BATBOTDIR}/userlist" "${FROMID}:${FIRSTNAMEUTF8}${LASTNAME}"
                                 fi
                             fi
 
