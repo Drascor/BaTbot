@@ -37,8 +37,8 @@ LASTMSGFILE="${BATBOTUSR}/${BOTID}.lastmsg"
 
 declare -A BOTCOMMANDS=(
     ["/start"]='exec userlist @USERID:@FIRSTNAME@LASTNAME'
-    ["/myid"]='echo Tu ID es: @USERID'
-    ["/myuser"]='echo Tu nombre de usuario es: @USERNAME'
+    ["/myid"]='echo @USERID'
+    ["/myuser"]='echo @USERNAME'
     ["/ping ([a-zA-Z0-9]+)"]='echo Pong: @R1'
     ["/uptime"]="uptime"
     # ["/add ([0-9]+)"]='exec admadduser @USERID @R1'
