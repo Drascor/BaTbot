@@ -36,7 +36,7 @@ LASTMSGFILE="${BATBOTUSR}/${BOTID}.lastmsg"
 # usa la función / setcommands en BotFather
 
 declare -A BOTCOMMANDS=(
-    ["/start"]='exec userlist @USERID:@FIRSTNAME@LASTNAME'
+    ["/start"]="exec ${BATBOTDIR}/userlist @USERID:@FIRSTNAME@LASTNAME"
     ["/myid"]='echo @USERID'
     ["/myuser"]='echo @USERNAME'
     ["/ping ([a-zA-Z0-9]+)"]='echo Pong: @R1'
