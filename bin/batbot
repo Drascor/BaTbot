@@ -149,7 +149,7 @@ while true; do
             FIRSTNAMEUTF8=$(echo -e "$FIRSTNAME")
             if [[ $MSGID -gt $LASTMSGID ]]; then
                 if grep -qe "$(echo "${TEXT}" | awk '{print $1}')" <(echo "${!BOTCOMMANDS[@]}"); then
-                    echo "[chat ${CHATID}][da ${FROMID}] <${FIRSTNAMEUTF8} ${LASTNAME}> ${TEXT}"
+                    echo "[chat ${CHATID}][de ${FROMID}] <${FIRSTNAMEUTF8} ${LASTNAME}> ${TEXT}"
                     echo "$MSGID" > "${LASTMSGFILE}"
                     for s in "${!BOTCOMMANDS[@]}"; do
                         if [[ "${TEXT}" =~ ${s} ]]; then
