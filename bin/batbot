@@ -49,7 +49,8 @@ declare -A BOTCOMMANDS=(
     # ["/docker_nginx_stop"]="docker start nginx"
     ["/ip"]='curl -A firefox -s https://www.ignaciocano.com/ip'
     ["/puppeteer"]="echo $USER"
-    ["/tr_add_magnet (.*)"]="transmission-remote --add '@R1'"  # -N ~/.netrc
+    ["/tr_add_hash (.*)"]="transmission-remote --add \$(hash2magnet.sh '@R1')"  # -N ~/.netrc
+    ["/tr_add_magnet (.*)"]="transmission-remote --add '@R1'"
     ["/tr_status"]="eval service transmission-daemon status >/dev/null && echo on || echo off"
     ["/tr_start"]="eval service transmission-daemon start >/dev/null && echo on"
     ["/tr_stop"]="eval service transmission-daemon stop >/dev/null && echo off"
@@ -61,6 +62,7 @@ declare -A BOTCOMMANDS=(
         /ping               \n\n
         /puppeteer          \n\n
         /run                \n\n
+        /tr_add_hash        \n\n
         /tr_add_magnet      \n\n
         /tr_start           \n\n
         /tr_stop            \n\n
