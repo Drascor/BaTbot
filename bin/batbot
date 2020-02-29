@@ -49,7 +49,7 @@ declare -A BOTCOMMANDS=(
     # ["/docker_nginx_stop"]="docker start nginx"
     ["/ip"]='curl -A firefox -s https://www.ignaciocano.com/ip'
     ["/puppeteer"]="echo $USER"
-    ["/tr_add_hash (.*)"]="eval transmission-remote --add \$(hash2magnet.sh '@R1') && echo ok || echo error"
+    ["/tr_add_hash (.*)"]="eval transmission-remote --add \$(hash2magnet.sh '@R1') >/dev/null && echo ok || echo error"
     ["/tr_add_magnet (.*)"]="eval transmission-remote --add '@R1' >/dev/null && echo ok || echo error"
     ["/tr_status"]="eval service transmission-daemon status >/dev/null && echo on || echo off"
     ["/tr_start"]="eval service transmission-daemon start >/dev/null && echo on || echo error"
@@ -173,21 +173,21 @@ while true; do
                             if [[ ${USERALLOWED} -eq 1 ]]; then
                                 if [[ ${FIRSTTIME} -eq 1 || ${DATEDIFF} -gt 10 ]]; then
                                     echo "Mensaje antiguo, no hay respuesta del usuario"
-                                    curl -s -d "text=Mensaje antiguo&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
+                                    curl -s -d "text=Mensaje antiguo&chat_id=${PERSONALID}" "${API_URL}/sendMessage" -o /dev/null
                                 else
                                     echo "Comando ${s} recibido, ejecuto: ${CMDORIG}"
                                     CMDOUTPUT=$($CMDORIG)
-                                    curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
+                                    curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" -o /dev/null
                                     if [[ "$FROMID" != "$PERSONALID" ]]; then
-                                        curl -s -d "text=${s} recibido de ${FIRSTNAMEUTF8} ${LASTNAME} ${FROMID}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
+                                        curl -s -d "text=${s} recibido de ${FIRSTNAMEUTF8} ${LASTNAME} ${FROMID}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" -o /dev/null
                                     fi
                                 fi
                             else
                                 CMDOUTPUT="BOT Privado. No estas autorizado a utilizarlo! tu ID es: ${FROMID}, Comunicate con el administrador para que te habilite."
                                 echo "Tu nombre no está en la lista: ${s} recibido por ${FIRSTNAMEUTF8} ${FROMID}"
-                                curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
+                                curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" -o /dev/null
                                 if [[ ${FROMID} != "${PERSONALID}" ]]; then
-                                    curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
+                                    curl -s -d "text=Usuario no habilitado: ${s} recibido de ${FIRSTNAMEUTF8} ${FROMID}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" -o /dev/null
                                 fi
                                 if [[ ${s} == "/start" ]]; then
                                     "${BATBOTDIR}/userlist" "${FROMID}:${FIRSTNAMEUTF8}${LASTNAME}"
@@ -200,16 +200,16 @@ while true; do
                     echo "$MSGID" > "${LASTMSGFILE}"
                     if [[ ${USERALLOWED} -eq 1 ]]; then
                         echo "Comando ${TEXT} no reconocido"
-                        curl -s -d "text=Comando ${TEXT} no reconocido.&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
+                        curl -s -d "text=Comando ${TEXT} no reconocido.&chat_id=${CHATID}" "${API_URL}/sendMessage" -o /dev/null
                         if [[ ${FROMID} != "${PERSONALID}" ]]; then
-                            curl -s -d "text=${TEXT} no reconocido recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
+                            curl -s -d "text=${TEXT} no reconocido recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" -o /dev/null
                         fi
                     else
                         CMDOUTPUT="¡No estás autorizado para ejecutar este comando!"
                         echo "Comando no habilitado : ${s} recibido de ${FROMID} ${FIRSTNAMEUTF8}"
-                        curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
+                        curl -s -d "text=${CMDOUTPUT}&chat_id=${CHATID}" "${API_URL}/sendMessage" -o /dev/null
                         if [[ ${FROMID} != "${PERSONALID}" ]]; then
-                            curl -s -d "text=Comando no habilitado: ${s} recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" > /dev/null
+                            curl -s -d "text=Comando no habilitado: ${s} recibido de ${FROMID} ${FIRSTNAMEUTF8} ${LASTNAME}&chat_id=${PERSONALID}" "${API_URL}/sendMessage" -o /dev/null
                         fi
                     fi
                 fi
@@ -223,11 +223,11 @@ while true; do
     if [[ "$answer" =~ ^\.msg.([\-0-9]+).(.*) ]]; then
         CHATID=${BASH_REMATCH[1]}
         MSGSEND=${BASH_REMATCH[2]}
-        curl -s -d "text=${MSGSEND}&chat_id=${CHATID}" "${API_URL}/sendMessage" > /dev/null
+        curl -s -d "text=${MSGSEND}&chat_id=${CHATID}" "${API_URL}/sendMessage" -o /dev/null
     elif [[ "$answer" =~ ^\.msg.([a-zA-Z]+).(.*) ]]; then
         CHATID=${BASH_REMATCH[1]}
         MSGSEND=${BASH_REMATCH[2]}
-        curl -s -d "text=${MSGSEND}&chat_id=@${CHATID}" "${API_URL}/sendMessage" > /dev/null
+        curl -s -d "text=${MSGSEND}&chat_id=@${CHATID}" "${API_URL}/sendMessage" -o /dev/null
     fi
 
 done
