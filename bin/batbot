@@ -39,8 +39,8 @@ declare -A BOTCOMMANDS=(
     ["/start"]="exec ${BATBOTDIR}/userlist @USERID:@FIRSTNAME@LASTNAME"
     ["/myid"]='echo @USERID'
     ["/myuser"]='echo @USERNAME'
-    ["/ping ([a-zA-Z0-9]+)"]='echo Pong: @R1'
     ["/uptime"]="uptime"
+    # ["/ping ([a-zA-Z0-9]+)"]='echo Pong: @R1'
     # ["/add ([0-9]+)"]='exec admadduser @USERID @R1'
     # ["/del ([0-9]+)"]='exec admdeluser @USERID @R1'
     # ["/lista"]='exec admlistuser @USERID'
@@ -55,19 +55,17 @@ declare -A BOTCOMMANDS=(
     ["/tr_start"]="eval service transmission-daemon start >/dev/null && echo on || echo error"
     ["/tr_stop"]="eval service transmission-daemon stop >/dev/null && echo off || echo error"
     ["/help"]='echo -e
-        Commands available: \n\n
-        /ip                 \n\n
-        /myid               \n\n
-        /myuser             \n\n
-        /ping               \n\n
-        /puppeteer          \n\n
-        /run                \n\n
-        /tr_add_hash        \n\n
-        /tr_add_magnet      \n\n
-        /tr_start           \n\n
-        /tr_stop            \n\n
-        /tr_status          \n\n
-        /uptime             \n\n
+        Commands available: \n
+        /ip                 \n
+        /myid               \n
+        /myuser             \n
+        /puppeteer          \n
+        /tr_add_hash        \n
+        /tr_add_magnet      \n
+        /tr_start           \n
+        /tr_stop            \n
+        /tr_status          \n
+        /uptime             \n
     '
 )
 
