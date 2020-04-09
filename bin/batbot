@@ -23,6 +23,8 @@ ALLOWEDUSER="${BATBOTUSR}/allowed_users"
 # revisar nuevos mensajes cada X segundos:
 CHECKNEWMSG=5
 
+MAX_SECONDS_OLD=20
+
 # last bot message file
 LASTMSGFILE="${BATBOTUSR}/${BOTID}.lastmsg"
 
@@ -171,7 +173,7 @@ while true; do
                             CMDORIG=${CMDORIG//@R3/${BASH_REMATCH[3]}}
 
                             if [[ ${USERALLOWED} -eq 1 ]]; then
-                                if [[ ${FIRSTTIME} -eq 1 || ${DATEDIFF} -gt 10 ]]; then
+                                if [[ ${FIRSTTIME} -eq 1 || ${DATEDIFF} -gt $MAX_SECONDS_OLD ]]; then
                                     echo "Mensaje antiguo, no hay respuesta del usuario"
                                     curl -s -d "text=Mensaje antiguo&chat_id=${PERSONALID}" "${API_URL}/sendMessage" -o /dev/null
                                 else
