@@ -25,9 +25,6 @@ CHECKNEWMSG=5
 
 MAX_SECONDS_OLD=20
 
-# last bot message file
-LASTMSGFILE="${BATBOTUSR}/${BOTID}.lastmsg"
-
 # change keyboard
 # curl -s -d "text=keyboard&chat_id=$ID&reply_markup={\"keyboard\":[[{\"text\":\"/help\"}]],\"resize_keyboard\":true,\"one_time_keyboard\":true}" "${API_URL}/sendMessage" && echo
 
@@ -97,6 +94,9 @@ else
     echo "Error: tal vez el token este equivocado ... saliendo"
     exit
 fi
+
+# last bot message file
+LASTMSGFILE="${BATBOTUSR}/${BOTID}.lastmsg"
 
 if [ -e "${LASTMSGFILE}" ]; then
     FIRSTTIME=0
