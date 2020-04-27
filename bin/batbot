@@ -5,7 +5,7 @@ VERSION="1.4.3.4\nBot de Telegram en Bash traducido por uGeek"
 # Fork de 1.4.3.4 - uGeekPodcast
 
 # Directorio de usuarios (Ruta donde está nuestra carpeta .batbot en nuestro servidor, Raspberry,...)
-BATBOTUSR="$HOME/.batbot"
+BATBOTUSR=""$( cd "$( dirname "$0" )" && pwd )"/../.batbot"
 
 BATBOTDIR="$(readlink -f "${BASH_SOURCE%/*}")"
 
